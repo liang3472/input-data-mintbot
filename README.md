@@ -28,8 +28,13 @@ price: 0.06e
 
 mint16进制编码: 0x1249c58b
 
-16进制这块不懂的可以参考 NFT黑魔法教程
-https://youtu.be/vq5fjkUGFZI
+## 教程
+16进制这块不懂的可以参考 NFT黑魔法教程 https://youtu.be/vq5fjkUGFZI
+
+## 工具
+inputdata编码工具 https://abi.hashex.org/
+
+inputdata解码工具 https://www.nftcontractwriter.com/
 
 ## 待实现功能
 
