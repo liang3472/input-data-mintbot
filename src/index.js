@@ -1,4 +1,5 @@
 import { createAlchemyWeb3 } from '@alch/alchemy-web3';
+import schedule from 'node-schedule';
 
 // ******************** 注意修改这块 ********************
 const CONTRACT = '填写合约地址';
@@ -19,16 +20,26 @@ const MAX_FEE_PER_GAS = 200;
 const DELAY_TIME = 1000;
 // 去alchemy 申请的appkey
 const ALCHEMY_AK = '填写你申请的alchemy AK';
-// *****************************************************
+
+const JOB_DATE = new Date(
+  2022, // 年
+  3,    // 月 从 0（1月）到 11（12月）
+  28,   // 日
+  3,    // 时(24小时制)
+  0,    // 分
+  0);   // 秒
 
 // test测试网， main主网
 const currENV = 'test';
+// *****************************************************
+
+
 const RPC_ENV = {
   main: 'wss://eth-mainnet.alchemyapi.io',
   test: 'wss://eth-rinkeby.ws.alchemyapi.io'
 };
 
-if(!ALCHEMY_AK) {
+if (!ALCHEMY_AK) {
   console.log('请设置alchemy ak');
 }
 const web3 = createAlchemyWeb3(`${RPC_ENV[currENV]}/v2/${ALCHEMY_AK}`);
@@ -103,10 +114,13 @@ const run = async () => {
 }
 
 let currNonce;
-web3.eth.getTransactionCount(WALLET.address, 'latest').then(nonce => {
-  currNonce = nonce;
-  console.log('最后一次nonce:', nonce);
-  run();
-}).catch(err => {
-  console.log('获取nonce异常');
+schedule.scheduleJob(JOB_DATE, () => {
+  console.log('⏰ 时间到了，开始执行脚本...');
+  web3.eth.getTransactionCount(WALLET.address, 'latest').then(nonce => {
+    currNonce = nonce;
+    console.log('最后一次nonce:', nonce);
+    run();
+  }).catch(err => {
+    console.log('获取nonce异常');
+  });
 });
